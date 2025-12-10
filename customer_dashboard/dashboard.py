@@ -166,8 +166,11 @@ if uploaded_file is not None:
         except Exception as e:
             st.error(f"Failed to read uploaded customer file: {e}")
             cust_df = None
-
-        if cust_df is not None:
+        if selected_warehouse:
+            cust_df = cust_df[cust_df['Wh name']==selected_warehouse].reset_index(drop=True)
+        else:
+            st.write('Please select warehouse first!')
+        if cust_df is not None and selected_warehouse:
             # Normalize column names
             lower_map = {c.lower(): c for c in cust_df.columns}
             cluster_col = lower_map.get('cluster_customer') or lower_map.get('cluster') or lower_map.get('cust_cluster')
